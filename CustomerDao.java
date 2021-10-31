@@ -12,5 +12,7 @@ public interface CustomerDao {
 	Customer getCustomerByName(String name) throws SQLException;
 
 	boolean postTransfer(int transfer, String name, String userDestiny) throws SQLException;
+
+	void refundOther(String user, int amount) throws SQLException;
 	
 }

@@ -1,6 +1,7 @@
 package project0;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Customer {
@@ -60,10 +61,11 @@ private String account;
 		System.out.println("Welcome, what actions do you wish to take?\n");
 		Scanner userInput = new Scanner(System.in);
 		boolean switchFlag=true;
-		CustomerDao dao = DaoFactory.getCustomerDao();
+		CustomerDao cDao = DaoFactory.getCustomerDao();
+		TransactionDao tDao = DaoFactory.getTransactionDao();
 		while (switchFlag) {
-			System.out.println("\nWelcome, what actions do you wish to take?\n");
-			System.out.println("\t1. View balance\n\t2. Deposit funds\n\t3. Withdraw funds\n\t4. Transfer funds to another customer's account\n\t5. Review transactions\n\t6. Exit\n\n Your Input: ");
+			System.out.println("\nThe following are your options:\n");
+			System.out.println("\t1. View balance\n\t2. Deposit funds\n\t3. Withdraw funds\n\t4. Transfer funds to another customer's account\n\t5. Review pending deposits\n\t6. Exit\n\n Your Input: ");
 			switch (userInput.next()) {
 			
 			//View balance
@@ -94,16 +96,10 @@ private String account;
 			
 			//Approve pending deposits
 			case "5":
-				//dao.checkTransaction where toUser is this.name
-				//return other customer with name and amount
-				//print other.getName and amount
-				//prompt user for positive for accepting and 0 for deny.
-				//if accept, delete transaction and increment MY balance
-				//if deny, delete transaction and increase OTHER balance
-				//Both operations result in an increase of balance
-				
-				
-				System.out.println("Your new balance is "+balance+"\n");	
+
+				List<Transaction> listedTransactions = tDao.checkTransaction(this.name);
+				transactionOptions(listedTransactions);				
+				System.out.println("Your current balance is "+balance+"\n");	
 				break;
 				
 			case "6":
@@ -117,6 +113,37 @@ private String account;
 	   }//While end
 		
 	}//CustomerMenuEnd
+
+private void transactionOptions(List<Transaction> listedTransactions) throws SQLException {
+		if(listedTransactions.isEmpty()) {
+			System.out.println("\nNo deposits are pending to you account.\n");
+			return;
+		}
+		System.out.println("\nYou have "+listedTransactions.size()+" deposits pending for your review.\n");
+		for(Transaction current : listedTransactions) {
+			System.out.println(current.toString());
+			System.out.println("Do you accept this transaction? Enter 0 for rejection and any other number to accept.\n");
+			int selection = enterInt();
+			if(selection ==0) {
+				System.out.println("\nYou have rejected the deposit from "+current.getUser()+ ", funds will now be refund to sender.\n");
+				//Simply call deposit to other.
+				CustomerDao dao = DaoFactory.getCustomerDao();
+				dao.refundOther(current.getUser(),current.getAmount());
+				
+			}
+			
+			else {
+				System.out.println("\nYou have accepted the deposit from "+current.getUser()+ ", funds will now be deposited to your account.\n");
+				depositValid(current.getAmount());
+			}
+			//If successfully called either deposit, delete the transaction pending.
+			TransactionDao tdao = DaoFactory.getTransactionDao();
+			tdao.deleteTransaction(current.getId());
+			
+			
+		}//endfor
+		
+	}
 
 private void transferValid(int transfer) throws SQLException {
 		CustomerDao dao = DaoFactory.getCustomerDao();
@@ -177,6 +204,7 @@ private int enterInt() {
 			
 	return id;
 }//Enter int end
+
 
 private void depositValid(int deposit) throws SQLException{
 	CustomerDao dao = DaoFactory.getCustomerDao();

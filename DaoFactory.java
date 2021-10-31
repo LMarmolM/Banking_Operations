@@ -5,6 +5,7 @@ import java.sql.SQLException;
 public class DaoFactory {
 private static EmployeeDao eDao;
 private static CustomerDao cDao;
+private static TransactionDao tDao;
 
 private DaoFactory() {}
 
@@ -20,6 +21,13 @@ public static CustomerDao getCustomerDao() throws SQLException {
 		cDao = new CustomerDaoImpl();
 	}
 	return cDao;
+}
+
+public static TransactionDao getTransactionDao() throws SQLException {
+	if (tDao ==null) {
+		tDao = new TransactionDaoImpl();
+	}
+	return tDao;
 }
 
 }

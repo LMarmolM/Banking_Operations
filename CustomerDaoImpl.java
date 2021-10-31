@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CustomerDaoImpl implements CustomerDao{
@@ -102,6 +103,18 @@ public class CustomerDaoImpl implements CustomerDao{
 		}
 		return true;
 	}//endtransfer
+
+	
+
+	//Refund
+	public void refundOther(String user, int amount) throws SQLException {
+
+		Customer other = getCustomerByName(user);
+		int oldBalance = other.getBalance();
+		int newBalance = oldBalance + amount;
+		other.setBalance(newBalance);
+		updateCustomer(other);
+	}
 
 	
 	
