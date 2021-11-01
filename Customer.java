@@ -53,7 +53,7 @@ private String account;
 	public void setAccount(String account) {this.account= account;}
 	
 	public String toString() {
-		String s = "\n\tID: "+id+"\tName: "+name+"\tEmail: "+email+"\tStatus: "+status+"\t"+"Account: "+account+"\tBalance: "+balance+"\n";
+		String s = "\n\tID: "+id+"\tName: "+name+"\tEmail: "+email+"\tStatus: "+status+"\t"+"\tBalance: "+balance+"\n";
 		return s;
 	}
 	
@@ -175,6 +175,13 @@ public boolean isCustomer() {
 	return false;
 }	
 
+public boolean isPending() {
+	System.out.println(" ");
+	if(status.equals("pending")) return true;
+	
+	return false;
+}	
+
 public boolean isRequested() {
 	
 	if(account.equals("requested")) return true;
@@ -240,6 +247,35 @@ private boolean withdrawValid(int withdraw) throws SQLException {
 		return false;
 	}
 	return true;
+	
+}
+
+public void userMenu() throws SQLException {
+	System.out.println("Welcome, what actions do you wish to take?\n");
+	Scanner userInput = new Scanner(System.in);
+	boolean switchFlag=true;
+	CustomerDao cDao = DaoFactory.getCustomerDao();
+	while (switchFlag) {
+		System.out.println("\nThe following are your options:\n");
+		System.out.println("\t1. Apply for Customer Banking Account\n\t2. Exit\n\n Your Input: ");
+		switch (userInput.next()) {
+		
+		//First option is to apply
+		case "1":
+			cDao.updateStatus(this,"pending");
+			System.out.println("\nYou have successfully aplied. Please wait for your account to be approved.\n");
+			break;
+		//Second option is to leave
+		case "2":
+			System.out.println("\nLogging out...\n");
+			switchFlag=false;
+			break;
+		default:
+			System.out.println("This input is not supported, please enter an option number from the list");
+			break;
+		}
+   }//While end
+	
 	
 }
 

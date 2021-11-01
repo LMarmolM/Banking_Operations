@@ -17,7 +17,7 @@ public class CustomerDaoImpl implements CustomerDao{
 		this.connection = ConnectionFactory.getConnection();
 	}
 	
-	//Employee can change ONLY the customer Approval Status. Employees do not have any other authority.
+	//Places starter balance
 	public void updateCustomer(Customer customer) throws SQLException {
 		String sql = "update users set balance = ? where name =?;";	
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -29,6 +29,16 @@ public class CustomerDaoImpl implements CustomerDao{
 	}
 	
 
+	public void updateStatus(Customer customer,String status) throws SQLException {
+		String sql = "update users set status = ? where name =?;";	
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, status);
+		preparedStatement.setString(2, customer.getName());
+		int count = preparedStatement.executeUpdate();
+		if(count>0) System.out.println("Status updated.");
+		else System.out.println("Something went wrong, your status is unchanged");
+	}	
+	
 	@Override
 	public List<Customer> getUsers() throws SQLException {
 		// TODO Auto-generated method stub
@@ -70,7 +80,29 @@ public class CustomerDaoImpl implements CustomerDao{
 	        customer.setAccount(resultSet.getString(6));
 	     }
 	     catch(Exception e){
-	    	 System.out.println("This id does not correspond to annyone, the location is empty ");
+	    	 System.out.println("\nThis username does not correspond to anyone, the location is available. \n");
+	    	return null; 
+	     }
+        return customer;
+	}
+	
+	public Customer getCustomerByEmail(String email) throws SQLException {
+
+	    String sql = "Select id,name,email,status,balance,account from users where email = '"+email+"'";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        Customer customer = new Customer();
+	    resultSet.next();
+        try {
+        	customer.setId(resultSet.getInt(1));
+	        customer.setName(resultSet.getString(2));
+	        customer.setEmail(resultSet.getString(3));
+	        customer.setStatus(resultSet.getString(4));
+	        customer.setBalance(resultSet.getInt(5));
+	        customer.setAccount(resultSet.getString(6));
+	     }
+	     catch(Exception e){
+	    	 System.out.println("\nThis email does not correspond to anyone, the location is available. \n");
 	    	return null; 
 	     }
         return customer;
@@ -85,7 +117,7 @@ public class CustomerDaoImpl implements CustomerDao{
 		return resultSet.next();
 	}
 
-	@Override
+	//Maybe move this to transactions?
 	public boolean postTransfer(int transfer, String name, String userDestiny) throws SQLException {
 		if(getCustomerByName(userDestiny)!=null) {
 			String sql = "insert transactions (amount,fromUser,toUser ) values(?,?,?)";	
@@ -114,6 +146,31 @@ public class CustomerDaoImpl implements CustomerDao{
 		int newBalance = oldBalance + amount;
 		other.setBalance(newBalance);
 		updateCustomer(other);
+	}
+
+	@Override
+	public void createCustomer(Customer newCustomer,String password) {
+		
+		try {
+			String sql = "insert into users (name,password,email,status,balance,account) values (?,?,?,?,?,?)";	
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1,newCustomer.getName());
+			preparedStatement.setString(2,password);
+			preparedStatement.setString(3,newCustomer.getEmail());
+			preparedStatement.setString(4,newCustomer.getStatus());
+			preparedStatement.setInt(5,newCustomer.getBalance());
+			preparedStatement.setString(6,newCustomer.getAccount());
+			int count = preparedStatement.executeUpdate();
+			
+			if(count>0) System.out.println("Account has been successfully created.");
+			else System.out.println("\nUnable to create account. Contact Manager\t\n");
+		}
+		catch (Exception e){
+			System.out.println("\nUnable to create account. Contact Manager\t\n" + e);
+			return;
+		}
+		return;
+		
 	}
 
 	

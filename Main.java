@@ -18,7 +18,7 @@ private static void mainMenu() throws SQLException {
 	boolean switchFlag=true;
 	while (switchFlag) {
 		System.out.println("\nMain Menu, please choose the login you require using numbers from 1 to 3 \n");
-		System.out.println("\t1. User\n\t2. Employee\n\t3. Exit\n\nYour Input: ");
+		System.out.println("\t1. User\n\t2. Employee\n\t3. Create new Account \n\t4. Exit\n\nYour Input: ");
 
 		switch (userInput.next()) {
 		case "1":
@@ -28,6 +28,9 @@ private static void mainMenu() throws SQLException {
 			Login.employeeLogin();
 			break;
 		case "3":
+			Login.createAccount();
+			break;
+		case "4":
 			System.out.println("Closing service...");
 			System.out.println("Thank you for choosing LE Banking");
 			userInput.close();

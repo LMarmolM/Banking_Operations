@@ -10,9 +10,15 @@ public interface CustomerDao {
 	List<Customer> getUsers() throws SQLException;
 
 	Customer getCustomerByName(String name) throws SQLException;
+	
+	public Customer getCustomerByEmail(String email) throws SQLException;
 
 	boolean postTransfer(int transfer, String name, String userDestiny) throws SQLException;
 
 	void refundOther(String user, int amount) throws SQLException;
+
+	void createCustomer(Customer newCustomer, String password);
+
+	void updateStatus(Customer customer, String string) throws SQLException;
 	
 }

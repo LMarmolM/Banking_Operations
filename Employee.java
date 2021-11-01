@@ -58,6 +58,7 @@ private String email;
 		Scanner userInput = new Scanner(System.in);
 		boolean switchFlag=true;
 		EmployeeDao dao = DaoFactory.getEmployeeDao();
+		CustomerDao cDao = DaoFactory.getCustomerDao();
 		while (switchFlag) {
 			System.out.println("\nEmployee menu: \n");
 			System.out.println("\t1. View all User Accounts\n\t2. Search User by ID\n\t3. Approve Accounts\n\t4. View Log for Cusotmer PENDING\n\t5. Exit\n\n Your Input: ");
@@ -84,31 +85,28 @@ private String email;
 				int inputCheck = enterInt();
 				customer = dao.getCustomerById(inputCheck);
 				//Check if customer.isCustomer(); otherwise say its not a customer
-				if(customer.isCustomer()) {
-					if(customer.isRequested()) {
-						
-						System.out.println("Enter 0 to disapprove and any other number to approve customer account creation: ");
+				if(customer.isPending()) {
+				
+						System.out.println("Pending approval process for "+customer.getName());
+						System.out.println("Enter 0 to disapprove or any other number to approve customer account creation: ");
 						inputCheck = enterInt();
 						if(inputCheck >0) {
-							customer.setAccount("active");
+							cDao.updateStatus(customer,"customer");
 							customer.setBalance(10000);
+							customer.setStatus("customer");
 						}
 						else {
-							customer.setAccount("inactive");
+							cDao.updateStatus(customer,"user");
+							customer.setStatus("user");
 						}
 						//Push value to database
 						dao.updateCustomer(customer);
-						
-						
-					}//pending
-					else {
-						System.out.println("\nThis customer has not requested a banking account\n");
-					}//end elsepending
+		
 					
 				}//end iscustomer
 				
 				else {
-					System.out.println("\nThis user is not a customer\n");
+					System.out.println("\nThis user status is not pending.\n");
 					continue;
 				}
 				System.out.println("Displaying customer information: ");

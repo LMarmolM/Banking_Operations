@@ -45,13 +45,51 @@ public class Login {
 		if(dao.Login(username, password)){
 			System.out.println("Login Successful\n");
 			Customer customer = dao.getCustomerByName(username);
-			customer.customerMenu();
+			if(customer.getStatus().equals("customer")) {
+				customer.customerMenu();
+			}
+			else {
+				customer.userMenu();
+			}
 		}
 		else {	System.out.println("Login Failed\n");}
 		
 		
 		
 	}//userLogin end
+	
+	public static void createAccount() throws SQLException {
+		CustomerDao dao = DaoFactory.getCustomerDao();
+		
+		System.out.println("Please enter your Username: ");
+		Scanner userInput = new Scanner(System.in);
+		String username = userInput.nextLine();
+		System.out.println("Please enter your Password: ");
+		String password = userInput.next();
+		System.out.println("Please enter your Email: ");
+		String email = userInput.next();
+		
+		Customer revision1 = dao.getCustomerByName(username);
+		if(revision1!=null) {
+			System.out.println("\nError: this username is already registered. Please select another one.\n");
+			return;	
+		}
+		
+		Customer revision2 = dao.getCustomerByEmail(email);
+		if(revision2!=null) {
+			System.out.println("\nError: this email is already registered. Please select another one.\n");
+			return;	
+		}
+		
+		Customer newCustomer = new Customer();
+		newCustomer.setName(username);
+		newCustomer.setEmail(email);
+		newCustomer.setStatus("user");
+		newCustomer.setAccount("inactive");
+		newCustomer.setBalance(0);
+		
+		dao.createCustomer(newCustomer,password);
+	}//CreateAccountEnd
 
 
 	}//class end

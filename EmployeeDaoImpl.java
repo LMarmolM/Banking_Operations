@@ -21,14 +21,13 @@ public class EmployeeDaoImpl implements EmployeeDao{
 		//The customer object passed down MUST have all variables filled in
 		//Since it is recovered from the database.
 		//Also ensures no mistakes since id is primary key.
-		String sql = "update users set account =? , balance = ? where id =?;";	
+		String sql = "update users set balance = ? where id =?;";	
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
-		preparedStatement.setString(1, customer.getAccount());
-		preparedStatement.setInt(2, customer.getBalance());
-		preparedStatement.setInt(3, customer.getId());
+		preparedStatement.setInt(1, customer.getBalance());
+		preparedStatement.setInt(2, customer.getId());
 		System.out.println(customer.getId());
 		int count = preparedStatement.executeUpdate();
-		if(count>0) System.out.println("Customer account value successfully changed.");
+		if(count>0) System.out.println("Customer account successfully changed.");
 		else System.out.println("Something went wrong");
 	}
 	
@@ -37,7 +36,7 @@ public class EmployeeDaoImpl implements EmployeeDao{
 	public List<Customer> getUsers() throws SQLException {
 		// TODO Auto-generated method stub
 		List<Customer> listedCustomers= new ArrayList<Customer>();
-        String sql = "Select id, name, email, status, balance, account from Users";
+        String sql = "Select id, name, email, status, balance from Users";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
@@ -49,7 +48,6 @@ public class EmployeeDaoImpl implements EmployeeDao{
 	        customer.setEmail(resultSet.getString(3));
 	        customer.setStatus(resultSet.getString(4));
 	        customer.setBalance(resultSet.getInt(5));
-	        customer.setAccount(resultSet.getString(6));
         	listedCustomers.add(customer);    
         	
         }
@@ -60,7 +58,7 @@ public class EmployeeDaoImpl implements EmployeeDao{
 	@Override
 	public Customer getCustomerById(int id) throws SQLException {
 
-	    String sql = "Select id,name,email,status,balance,account from users where id = "+id;
+	    String sql = "Select id,name,email,status,balance from users where id = "+id;
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         Customer customer = new Customer();
@@ -71,12 +69,11 @@ public class EmployeeDaoImpl implements EmployeeDao{
 	        customer.setEmail(resultSet.getString(3));	
 	        customer.setStatus(resultSet.getString(4));
 	        customer.setBalance(resultSet.getInt(5));
-	        customer.setAccount(resultSet.getString(6));
 	  
 	        return customer;
 	     }
 	     catch(Exception e){
-	    	 System.out.println("This id does not correspond to annyone, the location is empty");
+	    	 System.out.println("This id does not correspond to anyone, the location is empty");
 	    	return null; 
 	     }
 
