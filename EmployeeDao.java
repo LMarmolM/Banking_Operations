@@ -9,6 +9,6 @@ public interface EmployeeDao {
 
 	Customer getCustomerById(int id) throws SQLException;
 
-	List<Customer> getUsers() throws SQLException;
+	//List<Customer> getUsers() throws SQLException;
 	
 }

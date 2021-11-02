@@ -12,7 +12,8 @@ public class Main {
 		mainMenu();
 
 	}//main end
-	
+
+	//Execution of project0
 private static void mainMenu() throws SQLException {
 	Scanner userInput = new Scanner(System.in);
 	boolean switchFlag=true;
@@ -43,8 +44,5 @@ private static void mainMenu() throws SQLException {
    }//While end
 		
  }//Main end
-
-
-
 
 }//class end

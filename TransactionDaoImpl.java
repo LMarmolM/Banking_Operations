@@ -21,11 +21,13 @@ Connection connection;
 	public TransactionDaoImpl() throws SQLException{
 		this.connection = ConnectionFactory.getConnection();
 	}
-
+	
+	//Procedure used
 	@Override
 	public void deleteTransaction(int id) throws SQLException {
 			//DELETE FROM table_name WHERE condition;
-		String sql = "delete from transactions where id=?";		
+		//String sql = "delete from transactions where id=?";
+		String sql = "Call deleteTransaction(?)";
 				
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		preparedStatement.setInt(1,id);
@@ -36,10 +38,12 @@ Connection connection;
 			
 		return ;
 	}
-
+	
+	//Procedure used
 	@Override
 	public List<Transaction> checkTransaction(String name) throws SQLException {
-		String sql = "select id,fromUser, amount from transactions where toUser= ?";		
+		//String sql = "select id,fromUser, amount from transactions where toUser= ?";
+		String sql = "Call checkTransaction(?)";
 		
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		preparedStatement.setString(1, name);

@@ -67,7 +67,7 @@ private String email;
 			
 			//View all users
 			case "1":
-				dao.getUsers();
+				cDao.getUsers();
 				break;
 				
 			//Search by ID

@@ -16,10 +16,11 @@ public class CustomerDaoImpl implements CustomerDao{
 	public CustomerDaoImpl() throws SQLException{
 		this.connection = ConnectionFactory.getConnection();
 	}
-	
+	//Procedure used
 	//Places starter balance
 	public void updateCustomer(Customer customer) throws SQLException {
-		String sql = "update users set balance = ? where name =?;";	
+		//String sql = "update users set balance = ? where name =?;";
+		String sql="Call startingBalance(?,?)";
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		preparedStatement.setInt(1, customer.getBalance());
 		preparedStatement.setString(2, customer.getName());
@@ -28,9 +29,10 @@ public class CustomerDaoImpl implements CustomerDao{
 		else System.out.println("Something went wrong, your balance is unchanged");
 	}
 	
-
+	//Procedure used
 	public void updateStatus(Customer customer,String status) throws SQLException {
-		String sql = "update users set status = ? where name =?;";	
+		//String sql = "update users set status = ? where name =?;";
+		String sql = "Call updateStatus(?, ?)";
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		preparedStatement.setString(1, status);
 		preparedStatement.setString(2, customer.getName());
@@ -43,7 +45,10 @@ public class CustomerDaoImpl implements CustomerDao{
 	public List<Customer> getUsers() throws SQLException {
 		// TODO Auto-generated method stub
 		List<Customer> listedCustomers= new ArrayList<Customer>();
-        String sql = "Select id, name, email, status, balance, account from Users";
+        //Usage of procedure
+		//refers to command
+		//Select id, name, email, status, balance, account from users;
+		String sql = "Call returnUsers";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
@@ -107,9 +112,11 @@ public class CustomerDaoImpl implements CustomerDao{
 	     }
         return customer;
 	}
-
+	
+	//procedure used
 	public boolean Login(String name, String password) throws SQLException {	
-		String sql = "select * from users where name= ? and password =?";		
+		//String sql = "select * from users where name= ? and password =?";
+		String sql = "Call userPassword(?,?)";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, name);
 			preparedStatement.setString(2, password);
