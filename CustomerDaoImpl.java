@@ -60,7 +60,6 @@ public class CustomerDaoImpl implements CustomerDao{
 	        customer.setEmail(resultSet.getString(3));
 	        customer.setStatus(resultSet.getString(4));
 	        customer.setBalance(resultSet.getInt(5));
-	        customer.setAccount(resultSet.getString(6));
         	listedCustomers.add(customer);    
         	
         }
@@ -71,7 +70,7 @@ public class CustomerDaoImpl implements CustomerDao{
 	@Override
 	public Customer getCustomerByName(String name) throws SQLException {
 
-	    String sql = "Select id,name,email,status,balance,account from users where name = '"+name+"'";
+	    String sql = "Select id,name,email,status,balance from users where name = '"+name+"'";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         Customer customer = new Customer();
@@ -82,7 +81,6 @@ public class CustomerDaoImpl implements CustomerDao{
 	        customer.setEmail(resultSet.getString(3));
 	        customer.setStatus(resultSet.getString(4));
 	        customer.setBalance(resultSet.getInt(5));
-	        customer.setAccount(resultSet.getString(6));
 	     }
 	     catch(Exception e){
 	    	 System.out.println("\nThis username does not correspond to anyone, the location is available. \n");
@@ -93,7 +91,7 @@ public class CustomerDaoImpl implements CustomerDao{
 	
 	public Customer getCustomerByEmail(String email) throws SQLException {
 
-	    String sql = "Select id,name,email,status,balance,account from users where email = '"+email+"'";
+	    String sql = "Select id,name,email,status,balance from users where email = '"+email+"'";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         Customer customer = new Customer();
@@ -104,7 +102,6 @@ public class CustomerDaoImpl implements CustomerDao{
 	        customer.setEmail(resultSet.getString(3));
 	        customer.setStatus(resultSet.getString(4));
 	        customer.setBalance(resultSet.getInt(5));
-	        customer.setAccount(resultSet.getString(6));
 	     }
 	     catch(Exception e){
 	    	 System.out.println("\nThis email does not correspond to anyone, the location is available. \n");
@@ -137,7 +134,7 @@ public class CustomerDaoImpl implements CustomerDao{
 			else System.out.println("Transaction went wrong, your balance is unchanged");
 		}
 		else{
-			System.out.println("\nUsername does not exist\n");
+			System.out.println("Unable to process transaction\n");
 			return false;
 		}
 		return true;
@@ -159,14 +156,14 @@ public class CustomerDaoImpl implements CustomerDao{
 	public void createCustomer(Customer newCustomer,String password) {
 		
 		try {
-			String sql = "insert into users (name,password,email,status,balance,account) values (?,?,?,?,?,?)";	
+			String sql = "insert into users (name,password,email,status,balance) values (?,?,?,?,?)";	
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1,newCustomer.getName());
 			preparedStatement.setString(2,password);
 			preparedStatement.setString(3,newCustomer.getEmail());
 			preparedStatement.setString(4,newCustomer.getStatus());
 			preparedStatement.setInt(5,newCustomer.getBalance());
-			preparedStatement.setString(6,newCustomer.getAccount());
+			
 			int count = preparedStatement.executeUpdate();
 			
 			if(count>0) System.out.println("Account has been successfully created.");

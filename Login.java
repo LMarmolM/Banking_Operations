@@ -85,7 +85,6 @@ public class Login {
 		newCustomer.setName(username);
 		newCustomer.setEmail(email);
 		newCustomer.setStatus("user");
-		newCustomer.setAccount("inactive");
 		newCustomer.setBalance(0);
 		
 		dao.createCustomer(newCustomer,password);

@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+//Makes a single connection object for the entire duration of the program. 
+//Details are retrieved from another document
 public class ConnectionFactory {
 private static Connection connection = null;
 

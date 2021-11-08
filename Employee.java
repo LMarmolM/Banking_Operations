@@ -61,7 +61,7 @@ private String email;
 		CustomerDao cDao = DaoFactory.getCustomerDao();
 		while (switchFlag) {
 			System.out.println("\nEmployee menu: \n");
-			System.out.println("\t1. View all User Accounts\n\t2. Search User by ID\n\t3. Approve Accounts\n\t4. View Log for Cusotmer PENDING\n\t5. Exit\n\n Your Input: ");
+			System.out.println("\t1. View all User Accounts\n\t2. Search User by ID\n\t3. Approve Accounts\n\t4. Exit\n\n Your Input: ");
 			Customer customer = new Customer();
 			switch (userInput.next()) {
 			
@@ -114,13 +114,8 @@ private String email;
 				
 				break;
 				
-			//View Log for Customer
 			case "4":
-				System.out.println("Pending JLOG4");
-				break;
-			//Exit
-			case "5":
-				
+		
 				switchFlag=false;
 				break;
 				

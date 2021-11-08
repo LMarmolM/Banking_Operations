@@ -4,13 +4,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+//Customer class has some useful methods and data relevant to itself
+//Stores everything except a 
 public class Customer {
 private int id;
 private String name;
 private String email;
 private String status;
 private int balance;
-private String account;
+
 	public Customer() {}
 	
 	public Customer(String name) {
@@ -25,7 +27,6 @@ private String account;
 		this.email=email;
 		this.status=status;
 		this.balance = balance;
-		this.account = account;
 	}
 	
 	public int getId() {return id;}
@@ -48,9 +49,6 @@ private String account;
 	
 	public void setBalance(int balance) {this.balance = balance;}
 	
-	public String getAccount() {return account;}
-	
-	public void setAccount(String account) {this.account= account;}
 	
 	public String toString() {
 		String s = "\n\tID: "+id+"\tName: "+name+"\tEmail: "+email+"\tStatus: "+status+"\t"+"\tBalance: "+balance+"\n";
@@ -91,7 +89,7 @@ private String account;
 				System.out.println("\nEnter amount to Transfer: ");
 				int transfer = enterInt();
 				transferValid(transfer);
-				System.out.println("Your new balance is "+balance+"\n");
+				System.out.println("Your balance is "+balance+"\n");
 				break;
 			
 			//Approve pending deposits
@@ -150,7 +148,10 @@ private void transferValid(int transfer) throws SQLException {
 		System.out.println("\nEnter username of user you wish to transfer to: ");
 		Scanner Input = new Scanner(System.in);
 		String userDestiny = Input.nextLine();
-	
+		if(userDestiny.equals(this.name)) {
+			System.out.println("\nUse the deposit option for transfers to self\n");
+			return;}
+		
 		if(!withdrawValid(transfer)) {return;}
 		//true is good
 		boolean transferFlag = true;
@@ -182,12 +183,6 @@ public boolean isPending() {
 	return false;
 }	
 
-public boolean isRequested() {
-	
-	if(account.equals("requested")) return true;
-	
-	return false;
-}	
 
 private int enterInt() {
 	
